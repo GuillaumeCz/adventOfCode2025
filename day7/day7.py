@@ -1,6 +1,7 @@
 
+# I did not succeed into this part 2 of the seventh day of advent of code.
 def get_values():
-    with open('./day7_data.txt') as file:
+    with open('./day7_sample.txt') as file:
         matrice = []
         for li in file:
             matrice.append(li.rstrip())
@@ -41,10 +42,46 @@ def part_1(matrice):
     return solution
 
 
-def main():
+def get_route(matrice, line, col, total, known):
+    if matrice[line][col] == '.' or matrice[line][col] == 'S':
+        known.append((line, col))
+    elif matrice[line][col] == '^':
+        acc = 0
+        # Makes everything crash because to heavy...
+        #  Need optimisation... !
+        # if (line, col + 1) not in known and matrice[line][col + 1] == '.':
+        acc += get_route(matrice, line, col + 1, total, known)
+
+        # if (line, col - 1) not in known and matrice[line][col - 1] == '.':
+        acc += get_route(matrice, line, col - 1, total, known)
+
+        total += acc
+        return total
+
+    line += 1
+    if line < len(matrice):
+        return get_route(matrice, line, col, total, known)
+    else:
+        total += 1
+        print('+1', line, col + 1)
+        return total
+
+
+def part_2(matrice):
     solution = 0
+
+    line = 0
+    col = matrice[0].index('S')
+
+    solution = get_route(matrice, line, col, 0, [])
+
+    return solution
+
+
+def main():
     matrice = get_values()
-    solution = part_1(matrice)
+    # solution = part_1(matrice)
+    solution = part_2(matrice)
     print('-->', solution)
 
 
